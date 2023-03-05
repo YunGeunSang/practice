@@ -6,16 +6,12 @@ import com.codestates.practice.coffee.dto.CoffeeResponseDto;
 import com.codestates.practice.coffee.entity.Coffee;
 import com.codestates.practice.coffee.mapper.CoffeeMapper;
 import com.codestates.practice.coffee.service.CoffeeService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController

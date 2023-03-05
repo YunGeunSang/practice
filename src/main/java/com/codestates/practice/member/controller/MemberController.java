@@ -3,21 +3,17 @@ package com.codestates.practice.member.controller;
 import com.codestates.practice.member.dto.MemberPatchDto;
 import com.codestates.practice.member.dto.MemberPostDto;
 import com.codestates.practice.member.entity.Member;
-import com.codestates.practice.member.entity.MemberResponseDto;
+import com.codestates.practice.member.dto.MemberResponseDto;
 import com.codestates.practice.member.mapper.MemberMapper;
 import com.codestates.practice.member.service.MemberService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController

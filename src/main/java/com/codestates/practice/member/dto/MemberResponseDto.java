@@ -1,9 +1,11 @@
-package com.codestates.practice.member.entity;
+package com.codestates.practice.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class MemberResponseDto {
     private long memberId;

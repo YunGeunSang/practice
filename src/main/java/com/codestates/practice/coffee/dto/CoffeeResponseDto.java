@@ -1,9 +1,11 @@
 package com.codestates.practice.coffee.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class CoffeeResponseDto {
     private long coffeeId;
