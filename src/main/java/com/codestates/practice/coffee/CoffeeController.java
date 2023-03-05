@@ -1,32 +1,37 @@
 package com.codestates.practice.coffee;
 
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/coffees")
 public class CoffeeController {
 
     @PostMapping
-    public String postCoffee(@RequestParam("korName") String korName,
-                             @RequestParam("engName") String engName,
-                             @RequestParam("price") int price){
-        String response =
-                "{\"" +
-                        "korName\":\""+korName+"\"," +
-                        "\"engName\":\""+engName+"\",\"" +
-                        "price\":\"" + price+
-                        "\"}";
+    public ResponseEntity postCoffee(@RequestParam("korName") String korName,
+                                     @RequestParam("engName") String engName,
+                                     @RequestParam("price") int price){
 
-        return response;
+        Map<String, Object> map = new HashMap<>();
+        map.put("korName", korName);
+        map.put("engName", engName);
+        map.put("price", price);
+
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 
     @GetMapping("/{member-id}")
-    public String getCoffee(@PathVariable("member-id") long memberId){
-        return null;
+    public ResponseEntity getCoffee(@PathVariable("member-id") long memberId){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
-    public String getCoffees(){
-        return null;
+    public ResponseEntity getCoffees(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
