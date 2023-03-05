@@ -2,38 +2,42 @@ package com.codestates.practice.coffee.controller;
 
 import com.codestates.practice.coffee.dto.CoffeePatchDto;
 import com.codestates.practice.coffee.dto.CoffeePostDto;
+import com.codestates.practice.coffee.dto.CoffeeResponseDto;
 import com.codestates.practice.coffee.entity.Coffee;
+import com.codestates.practice.coffee.mapper.CoffeeMapper;
 import com.codestates.practice.coffee.service.CoffeeService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/coffees")
+@Validated
 public class CoffeeController {
 
     private final CoffeeService coffeeService;
+    private final CoffeeMapper mapper;
 
-    public CoffeeController(CoffeeService coffeeService) {
+    public CoffeeController(CoffeeService coffeeService, CoffeeMapper mapper) {
         this.coffeeService = coffeeService;
+        this.mapper = mapper;
     }
 
     @PostMapping
     public ResponseEntity postCoffee(@RequestBody CoffeePostDto coffeePostDto){
-        Coffee coffee = new Coffee();
-        coffee.setKorName(coffeePostDto.getKorName());
-        coffee.setEngName(coffeePostDto.getEngName());
-        coffee.setPrice(coffeePostDto.getPrice());
+        Coffee coffee = mapper.coffeePostDtoToCoffee(coffeePostDto);
 
         Coffee response = coffeeService.createCoffee(coffee);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{coffee-id}")
@@ -41,25 +45,26 @@ public class CoffeeController {
                                       @RequestBody CoffeePatchDto coffeePatchDto) {
         coffeePatchDto.setCoffeeId(coffeeId);
 
-        Coffee coffee = new Coffee();
-        coffee.setCoffeeId(coffeePatchDto.getCoffeeId());
-        coffee.setPrice(coffeePatchDto.getPrice());
+        Coffee response = coffeeService.updateCoffee(mapper.coffeePatchDtoToCoffee(coffeePatchDto));
 
-        Coffee response = coffeeService.updateCoffee(coffee);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response), HttpStatus.OK);
     }
 
     @GetMapping("/{coffee-id}")
     public ResponseEntity getCoffee(@PathVariable("coffee-id") long coffeeId){
         Coffee response = coffeeService.findCoffee(coffeeId);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getCoffees(){
-        List<Coffee> response = coffeeService.findCoffees();
+        List<Coffee> coffees = coffeeService.findCoffees();
+
+        List<CoffeeResponseDto> response = coffees.stream()
+                .map(coffee -> mapper.coffeeToCoffeeResponseDto(coffee))
+                .collect(Collectors.toList());
+
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

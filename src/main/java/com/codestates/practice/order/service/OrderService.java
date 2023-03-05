@@ -1,9 +1,11 @@
 package com.codestates.practice.order.service;
 
 import com.codestates.practice.order.entity.Order;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OrderService {
     public Order createOrder(Order order){
         Order createdOrder = order;
