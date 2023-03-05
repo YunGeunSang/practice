@@ -1,4 +1,4 @@
-package com.codestates.practice.order;
+package com.codestates.practice.order.controller;
 
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
