@@ -1,10 +1,14 @@
 package com.codestates.practice.order.controller;
 
+import com.codestates.practice.order.dto.OrderPatchDto;
+import com.codestates.practice.order.dto.OrderPostDto;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,20 +17,22 @@ import java.util.Map;
 public class OrderController {
 
     @PostMapping
-    public ResponseEntity postOrder(@RequestParam("memberId") long memberId,
-                                    @RequestParam("coffeeId") long coffeeId){
+    public ResponseEntity postOrder(@RequestBody @Valid OrderPostDto orderPostDto){
 
-        Map<String, Long> map = new HashMap<>();
-        map.put("memberId", memberId);
-        map.put("coffeeId", coffeeId);
 
-        return new ResponseEntity<>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(orderPostDto, HttpStatus.CREATED);
     }
 
 
+    @PatchMapping("/{order-id}")
+    public ResponseEntity patchOrder(@PathVariable("order-id") @Positive long orderId,
+                                     @RequestBody @Valid OrderPatchDto orderPatchDto){
+
+        return new ResponseEntity<>(orderPatchDto, HttpStatus.OK);
+    }
 
     @GetMapping("/{order-id}")
-    public ResponseEntity getOrder(@PathVariable("order-id") long orderId){
+    public ResponseEntity getOrder(@PathVariable("order-id") @Positive long orderId){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -34,4 +40,11 @@ public class OrderController {
     public ResponseEntity getOrders(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{order-id}")
+    public ResponseEntity deleteOrder(@PathVariable("order-id") @Positive long orderId){
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
+
