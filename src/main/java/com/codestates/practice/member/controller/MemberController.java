@@ -6,6 +6,7 @@ import com.codestates.practice.member.entity.Member;
 import com.codestates.practice.member.dto.MemberResponseDto;
 import com.codestates.practice.member.mapper.MemberMapper;
 import com.codestates.practice.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/v1/members")
 @Validated
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -76,4 +78,6 @@ public class MemberController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }

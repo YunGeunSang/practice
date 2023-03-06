@@ -1,5 +1,7 @@
 package com.codestates.practice.member.service;
 
+import com.codestates.practice.exception.BusinessLogicException;
+import com.codestates.practice.exception.ExceptionCode;
 import com.codestates.practice.member.entity.Member;
 import org.springframework.stereotype.Service;
 
