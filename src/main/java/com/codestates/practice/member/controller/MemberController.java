@@ -6,6 +6,7 @@ import com.codestates.practice.member.entity.Member;
 import com.codestates.practice.member.dto.MemberResponseDto;
 import com.codestates.practice.member.mapper.MemberMapper;
 import com.codestates.practice.member.service.MemberService;
+import com.codestates.practice.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Validated
 @Slf4j
 public class MemberController {
+    private final static String MEMBER_DEFAULT_URL = "/v1/members";
     private final MemberService memberService;
     private final MemberMapper mapper;
 
@@ -35,9 +38,11 @@ public class MemberController {
 
         Member member = mapper.memberPostDtoToMember(memberPostDto);
 
-        Member response = memberService.createMember(member);
+        Member resultMember = memberService.createMember(member);
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
+        URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, resultMember.getMemberId());
+
+        return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{member-id}")
