@@ -1,5 +1,6 @@
 package com.codestates.practice.member.controller;
 
+import com.codestates.practice.dto.MultiResponseDto;
 import com.codestates.practice.member.dto.MemberPatchDto;
 import com.codestates.practice.member.dto.MemberPostDto;
 import com.codestates.practice.member.entity.Member;
@@ -8,6 +9,7 @@ import com.codestates.practice.member.mapper.MemberMapper;
 import com.codestates.practice.member.service.MemberService;
 import com.codestates.practice.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -66,16 +68,18 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity getMembers(){
-        List<Member> members = memberService.findMembers();
+    public ResponseEntity getMembers(@Positive @RequestParam int page,
+                                     @Positive @RequestParam int size){
+        Page<Member> pageMembers = memberService.findMembers(page - 1, size);
+        List<Member> members = pageMembers.getContent();
 
-        List<MemberResponseDto> response =
-                members.stream()
-                        .map(member -> mapper.memberToMemberResponseDto(member))
-                        .collect(Collectors.toList());
+        return new ResponseEntity<>(
+            new MultiResponseDto<>(mapper.membersToMemberResponseDto(members),
+                    pageMembers),
+            HttpStatus.OK);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+
+        }
 
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId){
